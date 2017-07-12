@@ -27,11 +27,11 @@ int main()
 	int casos, n;
 
 	cin >> casos;
-	if (casos > 100000)
+	while (casos > 0)
 	{
-		while (casos > 0)
+		cin >> n;
+		if (n > 0 && n <= 10000)
 		{
-			cin >> n;
 			int *v = new int[n];
 			for (int i = 0; i < n; i++)
 			{
@@ -39,8 +39,10 @@ int main()
 			}
 			cout << procesa(v, n) << endl;
 			delete v;
-			casos--;
 		}
+
+		casos--;
 	}
+
 	return 0;
 }

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Iter4.cpp" />
+    <ClCompile Include="iter8.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1E2F6316-DD57-4DAC-99C3-8694924175CB}</ProjectGuid>
