@@ -29,6 +29,8 @@ class SetOfInts3 {
 		void setSize(int value) throw (Error);
 		int getMax() const throw (Error);
 		void removeMax();
+		int getMin() const throw (Error);
+		void removeMin();
 
 		bool operator==(const SetOfInts3& set) const;
 		bool operator<(const SetOfInts3& set) const;

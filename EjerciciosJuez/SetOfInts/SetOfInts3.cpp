@@ -22,7 +22,7 @@ int SetOfInts3::getSize() const
 
 void SetOfInts3::setSize( int value) throw (Error)
 {
-	if (size < 0) 
+	if (value < 0 || value > MAXSIZE)
 		throw Error("size incorrect");
 	size = value;
 }
@@ -38,6 +38,22 @@ void SetOfInts3::removeMax()
 {
 	if (size > 0)
 		size--;
+}
+
+int SetOfInts3::getMin() const throw(Error)
+{
+	if (isEmpty())
+		throw Error("Set is empty");
+	return elems[0];
+}
+
+void SetOfInts3::removeMin()
+{
+	if (size > 0)
+	{
+		shiftLeftFrom(0);
+		size--;
+	}
 }
 
 void SetOfInts3::add(int x) throw (Error) {
