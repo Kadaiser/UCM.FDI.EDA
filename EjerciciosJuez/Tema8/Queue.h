@@ -86,6 +86,7 @@ public:
 			_ult = NULL;
 	}
 
+
 	/**
 	 Devuelve el primer elemento de la cola. Operaci�n
 	 observadora parcial, que falla si la cola est� vac�a.
@@ -100,6 +101,22 @@ public:
 		if (empty())
 			throw EmptyQueueException("Cannot get front: Queue is empty");
 		return _prim->_elem;
+	}
+
+	/**
+	Devuelve el ultimo elemento de la cola. Operaci�n
+	observadora parcial, que falla si la cola est� vac�a.
+
+	front(Push_back(elem, EmptyQueue)) = elem
+	front(Push_back(elem, xs)) = primero(xs) si !empty(xs)
+	error: front(EmptyQueue)
+
+	@return El primer elemento de la cola.
+	*/
+	const T &back() const {
+		if (empty())
+			throw EmptyQueueException("Cannot get front: Queue is empty");
+		return _ult->_elem;
 	}
 
 	/**
@@ -178,8 +195,83 @@ public:
 		}
 		sOut << "}" << endl;
 	}
+	/*inserta una cola dentro de la cola a partir del elemento indicado*/
+	void jumpTheQueue(const T& loser,const Queue<T> &buddies)
+	{
+		bool found = false;
+		Nodo *aux = _prim;
+		Nodo *aux2 = NULL;
+
+		if (!buddies.empty())
+		{
+			while (aux->_sig != NULL && !found) //search for loser
+			{
+				if (aux->_elem == loser)
+				{
+					found = true;
+					aux2 = aux->_sig;
+				}
+				else
+					aux = aux->_sig;
+			}
+			if (found)
+			{
+				if (_prim->_elem == aux->_elem)
+					_prim->_sig = buddies._prim;
+				else
+					aux->_sig = buddies._prim;
+				buddies._ult->_sig = aux2;
+				_numElems += buddies._numElems;
+			}
+		}
+		
+	}
+
+	/** Invierte las posiciones de los primeros n elementos de la cola */
+	void inversePositons(int n)
+	{
+		if (n > 2)
+		{
+			Nodo *aux = _prim;
+			Nodo *aux2 = _prim->_sig;
+			Nodo *ancla = aux2;
+			Nodo *auxUlt = aux;
+			if (n >= _numElems)		//casos de n => cola.size 
+			{
+				auxUlt->_sig = NULL;
+				n = _numElems;
+			}
+			for (int i = 0; i < n - 1; i++) //avanzamos hasta la posicion n deseada
+				ancla = ancla->_sig;
+			aux->_sig = ancla;				//cambiamos el _sig del primer puntero hacia la posicion n
+			for (int j = 0; j < n -1; j++) //desconectamos uno a uno los nodos conectadonlos en el orden inverso
+			{
+				ancla = aux2->_sig;
+				aux2->_sig = aux;
+				aux = aux2;
+				aux2 = ancla;
+			}
+			if (n >= _numElems)
+				_ult = auxUlt;
+			_prim = aux;
+		}
+	}
+
+	void duplicateElems()
+	{
+		T elem;
+		int cont = size();
+		while (cont--)
+		{
+			elem = front();
+			pop_front();
+			push_back(elem);
+			push_back(elem);
+		}
+	}
 
 protected:
+
 
 	void libera() {
 		libera(_prim);
@@ -206,7 +298,6 @@ protected:
 	}
 
 private:
-
 	/**
 	 Clase nodo que almacena internamente el elemento (de tipo T),
 	 y un puntero al nodo siguiente, que podr�a ser NULL si

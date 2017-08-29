@@ -13,6 +13,7 @@
 #ifndef __LIST_H
 #define __LIST_H
 
+#include <iostream>
 #include "Exceptions.h"
 #include <cassert>
 
@@ -211,6 +212,65 @@ public:
 			aux = aux->_sig;
 
 		return aux->_elem;
+	}
+
+	/** Escribe la lista en el flujo. Se usa desde operator<< */
+	void write(std::ostream& sOut) {
+		Nodo *aux = _prim;
+
+		if (aux == NULL)
+			cout << "";
+		while (aux != NULL)
+		{
+			if (aux->_sig == NULL)
+				cout << aux->_elem;
+			else
+				cout << aux->_elem << " ";
+			aux = aux->_sig;
+		}
+		cout << '\n';
+	}
+	void eraseDupicatesOf(const T& elem)
+	{
+		Nodo *aux = _prim;
+
+		while (aux != NULL)
+		{
+			if (aux->_elem == elem) //delete node
+			{
+				if (aux->_ant == NULL && aux->_sig == NULL) //only left
+				{
+					_prim = _ult = NULL;
+					aux = NULL;
+				}
+				else if (aux->_ant == NULL) //fisrt element
+				{
+					aux->_sig->_ant = NULL;
+					aux = aux->_sig;
+					_prim = _prim->_sig;
+
+				}
+				else
+				{
+					if (aux->_sig == NULL) //last element
+					{
+						_ult = _ult->_ant;
+						_ult->_sig = NULL;
+						aux = NULL;
+
+					}
+					else //inner element
+					{
+						aux->_ant->_sig = aux->_sig;
+						aux->_sig->_ant = aux->_ant;
+						aux = aux->_sig;
+					}
+				}
+				_numElems--;
+			}
+			else //not found, go trougth
+				aux = aux->_sig;
+		}
 	}
 
 	/**
@@ -554,5 +614,11 @@ private:
 	// N�mero de elementos (n�mero de nodos entre _prim y _ult)
 	unsigned int _numElems;
 };
+
+template<class T>
+std::ostream& operator<<(std::ostream& sOut, List<T>& l) {
+	l.write(sOut);
+	return sOut;
+}
 
 #endif // __LIST_H
